@@ -1,4 +1,3 @@
-// D:\binmile-assignmant\URL_SHORTNER-master\URL_SHORTNER-master\BACKEND\app.js
 import express from "express";
 import dotenv from "dotenv"
 import connectDB from "./src/config/monogo.config.js"
@@ -11,9 +10,17 @@ import cors from "cors"
 import { attachUser } from "./src/utils/attachUser.js";
 import cookieParser from "cookie-parser"
 
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
+
+
 dotenv.config("./.env")
 
+const swaggerDocument = YAML.load('./swagger.yaml');
+
 const app = express();
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(cors({
     origin: 'http://localhost:5173', // your React app
@@ -31,6 +38,8 @@ app.use("/api/auth",auth_routes)
 
 app.use("/api/create",short_url)
 app.get("/:id",redirectFromShortUrl)
+
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(errorHandler)
 
