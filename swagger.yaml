@@ -123,17 +123,28 @@ paths:
   /{id}:
     get:
       summary: Redirect to original long URL using short code
+      description: >
+        This endpoint performs a `302` redirect to the original long URL.
+        It **cannot be tested directly in Swagger UI**.
+        Use a browser or Postman/cURL.
+
       parameters:
         - in: path
           name: id
           required: true
           schema:
             type: string
+            example: qwerty12
       responses:
-        '302':
-          description: Redirects to the original URL
-        '404':
-          description: Short URL not found
+      '302':
+        description: Redirects to the original long URL
+        headers:
+          Location:
+            description: Redirect target
+            schema:
+              type: string
+      '404':
+        description: Short URL not found
 
 components:
   securitySchemes:
